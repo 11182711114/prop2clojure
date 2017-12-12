@@ -1,3 +1,4 @@
+(comment "
 (ns assign1.core
   (:gen-class))
 
@@ -13,25 +14,25 @@
   ([vector] (println "second")))
 
 
-(comment "
-(defn closeable 
+
+  (defn closeable 
   [vector form] 
   (`(let [~(first vector) ~(second vector)] 
-     ((~form
-        (. ~(first vector) close))))))
-     
-                  
-
-(defn not-closable 
+  ((~form
+  (. ~(first vector) close))))))
+  
+  
+  
+  (defn not-closable 
   [vector form]
   (println [vector form]))
-
-(defmacro safes 
+  
+  (defmacro safes 
   [vector form]
   (if (instance? java.io.Closeable (second vector))
-    (closeable [vector form])
-    (not-closable [vector form])))
-    
+  (closeable [vector form])
+  (not-closable [vector form])))
+  
   
   (defmacro closeable
   [vector form]
