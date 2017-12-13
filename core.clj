@@ -73,34 +73,27 @@
 
 
 
+;;; SQL TESTING
+
+(def persons '({:id 1 :name "olle"} {:id 2 :name "anna"} {:id 3 :name"isak"} {:id 4 :name "beatrice"}))
+
 ;;; SQL
 
 (defn sortSQL
   [coll orderby]
-  (sort-by 
-    ()
+  `(sort-by 
+    orderby
     coll))
 
 (defn filterSQL
-  [from where]
-  (filter 
-    (where) 
-    from))
-
-(defn printpersons
-  [coll]
-  (clojure.pprint/print-table 
-    (filter 
-      (fn 
-        [item] 
-        (> (get item :id) 2))
-      coll)))
+  [coll pred]
+  `(filter 
+     (fn test
+       [item#] 
+       (~(second pred) (get item# ~(first pred)) ~(nnext pred))
+       ~(coll))))
 
 (defmacro select
   [columns _ from _ where _ orderby]
-  ((do 
-     (println columns)
-     (println from)
-     (println where)
-     (println orderby))))
+  `(filterSQL ~from ~where))
    
