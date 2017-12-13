@@ -1,57 +1,5 @@
 (ns nca2.core
-  (:gen-class))
-(comment "
-(defn -main []
-  (println "Hello, World!"))
-
-(defmacro test1
-  [vector form]
-  `(let [~(first vector) ~(second vector)] ~(first vector))) 
-
-(defmacro test2
-  ([vector form] (println "first"))
-  ([vector] (println "second")))
-
-
-
-  (defn closeable 
-  [vector form] 
-  (`(let [~(first vector) ~(second vector)] 
-  ((~form
-  (. ~(first vector) close))))))
-  
-  
-  
-  (defn not-closable 
-  [vector form]
-  (println [vector form]))
-  
-  (defmacro safes 
-  [vector form]
-  (if (instance? java.io.Closeable (second vector))
-  (closeable [vector form])
-  (not-closable [vector form])))
-  
-  
-  (defmacro closeable
-  [vector form]
-  `(try
-  (let ~vector 
-  (try      
-  ~form
-  (catch Exception e# (str (.getMessage e##)))
-  (finally (.close ~(first vector)))))
-  (catch Exception ee# (str (.getMessage e##)))))
-  
-  (defmacro uncloseable
-  [vector form]
-  `(try
-  (let ~vector    
-  ~form)
-  (catch Exception ee# (str (.getMessage ee#)))))
-  ")
-
-  
+  (:gen-class))  
 (import java.io.File)
 (import java.io.FileReader)
   
@@ -80,6 +28,8 @@
 ;;; SQL
 
 (defmacro select
+  "Acts like an SQL statement (e.g. 'SELECT :name from persons where [:id = 2] orderby :name').
+  Due to how it is constucted the where clause can use any clojure function that returns boolean and looks like [column op value] -> '(op column value)'"
   [columns _ from _ where _ orderby]
   `(map
     #(select-keys % ~columns)
