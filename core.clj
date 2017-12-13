@@ -79,21 +79,14 @@
 
 ;;; SQL
 
-(defn sortSQL
-  [coll orderby]
-  `(sort-by 
-    orderby
-    coll))
-
-(defn filterSQL
-  [coll pred]
-  `(filter 
-     (fn test
-       [item#] 
-       (~(second pred) (get item# ~(first pred)) ~(nnext pred))
-       ~(coll))))
-
 (defmacro select
   [columns _ from _ where _ orderby]
-  `(filterSQL ~from ~where))
-   
+  `(map
+    #(select-keys % ~columns)
+    (sort-by 
+      ~orderby 
+      (filter 
+        (fn 
+          [item#] 
+          (~(second where) (get item# ~(first where)) ~@(nnext where))) 
+        ~from))))
