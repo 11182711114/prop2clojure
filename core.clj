@@ -1,7 +1,6 @@
-(comment "
-(ns assign1.core
+(ns nca2.core
   (:gen-class))
-
+(comment "
 (defn -main []
   (println "Hello, World!"))
 
@@ -60,17 +59,48 @@
   ([form]
    `(try 
       ~form
-      (catch Exception e# (str (.getMessage e#)))))
+      (catch Exception formException# (str (.toString formException#)))))
   ([vector form]
    `(try
      (let ~vector 
        (try      
          ~form
-         (catch Exception ee# (str (.getMessage ee#)))
+         (catch Exception formException# (str (.toString formException#)))
          (finally 
            (if (instance? java.io.Closeable ~(first vector)) 
              (.close ~(first vector))))))
-     (catch Exception eee# (str (.getMessage eee#))))))
+     (catch Exception bindingException# (str (.toString bindingException#))))))
 
-  
+
+
+;;; SQL
+
+(defn sortSQL
+  [coll orderby]
+  (sort-by 
+    ()
+    coll))
+
+(defn filterSQL
+  [from where]
+  (filter 
+    (where) 
+    from))
+
+(defn printpersons
+  [coll]
+  (clojure.pprint/print-table 
+    (filter 
+      (fn 
+        [item] 
+        (> (get item :id) 2))
+      coll)))
+
+(defmacro select
+  [columns _ from _ where _ orderby]
+  ((do 
+     (println columns)
+     (println from)
+     (println where)
+     (println orderby))))
    
