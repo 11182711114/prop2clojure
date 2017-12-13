@@ -1,7 +1,5 @@
 (ns nca2.core
   (:gen-class))  
-(import java.io.File)
-(import java.io.FileReader)
   
 (defmacro safe 
   ([form]
@@ -21,8 +19,7 @@
 
 
 
-;;; SQL TESTING
-
+;;; FOR SQL TESTING
 (def persons '({:id 1 :name "olle"} {:id 2 :name "anna"} {:id 3 :name"isak"} {:id 4 :name "beatrice"}))
 
 ;;; SQL
