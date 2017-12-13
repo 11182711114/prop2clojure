@@ -20,12 +20,12 @@
 
 
 ;;; FOR SQL TESTING
-(def persons '({:id 1 :name "olle"} {:id 2 :name "anna"} {:id 3 :name"isak"} {:id 4 :name "beatrice"}))
+(def persons '({:id 1 :name "olle" :length 156} {:id 2 :name "anna" :length 201} {:id 3 :name"isak" :length 190} {:id 4 :name "beatrice" :length 175}))
 
 ;;; SQL
 
 (defmacro select
-  "Acts like an SQL statement (e.g. 'SELECT :name from persons where [:id = 2] orderby :name').
+  "Acts like an SQL statement (e.g. 'SELECT [:name :id] from persons where [:id = 2] orderby :name').
   Due to how it is constucted the where clause can use any clojure function that returns boolean and looks like [column op value] -> '(op column value)'"
   [columns _ from _ where _ orderby]
   `(map
