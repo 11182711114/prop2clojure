@@ -1,4 +1,4 @@
-(ns nca2.core
+(ns assign1.core
   (:gen-class))  
   
 (defmacro safe 
@@ -31,9 +31,7 @@
   `(map
     #(select-keys % ~columns)
     (sort-by 
-      ~orderby 
-      (filter 
-        (fn 
-          [item#] 
-          (~(second where) (get item# ~(first where)) ~@(nnext where))) 
-        ~from))))
+     ~orderby 
+     (filter 
+      #(~(second where) (~(first where) %) ~@(nnext where)) 
+      ~from))))
