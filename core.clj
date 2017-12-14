@@ -1,4 +1,4 @@
-(ns assign1.core
+(ns nca2.core
   (:gen-class))  
   
 (defmacro safe 
@@ -45,14 +45,19 @@
     #(select-keys % ~columns)
     (sort-by 
      ~orderby
-     (~(for [[colu op val] (partition 3 where)]
-        `(filter 
-          #(~op (~colu %) ~val) 
-          ~from)))))) ;; should end the filter list with ~from
+     (filter 
+      (fn [map#] apply every-pred
+        ~(for 
+           [[colu# op# val#] (partition 3 where)] 
+           `(~op# (get ~colu# map#) ~val#))) ;;;; HOW TO GET map# into this?
+      ~from)))) ;; should end the filter list with ~from
  
-(defmacro testss
-  [where]
-  `(~(partition 3 where)))
+(defmacro predicates
+  [preds]
+  (for 
+    [[colu op val] (partition 3 preds)] 
+    `(~op ~colu ~val))) 
+    
 
 
 
