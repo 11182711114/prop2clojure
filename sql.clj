@@ -1,6 +1,6 @@
+;frla9839 olso0747
+
 ;; Working default, doesnt restrict where predicate operator
-
-
 (defmacro select
   "Acts like an SQL statement (e.g. 'SELECT [:name :id] from persons where [:id = 2] orderby :name').
   Due to how it is constucted the where clause can use any clojure function that returns boolean and looks like [column op value] -> '(op column value)'
