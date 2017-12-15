@@ -1,3 +1,6 @@
+; Exceptions are returned as their toString string, 
+; if the exception itself is returned (i.e. catch Exception formException) 
+; the entire stacktrace is printed in the repl
 (defmacro safe 
   ([form]
    `(try 

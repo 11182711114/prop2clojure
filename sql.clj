@@ -6,14 +6,16 @@
   Due to how it is constucted the where clause can use any clojure function that returns boolean and looks like [column op value] -> '(op column value)'"
   [columns _ from _ where _ orderby]
   `(map
-    #(select-keys % ~columns)
-    (sort-by 
-     ~orderby 
-     (filter 
-      #(~(if (= "<>" (str (second where))) 'not= (second where)) 
-        (~(first where) %) 
-        ~@(nnext where)) 
-      ~from))))
+      #(select-keys % ~columns)
+      (sort-by 
+         ~orderby 
+         (filter 
+            #(~(if (= "<>" (str (second where))) 
+                 'not= 
+                 (second where)) 
+              (~(first where) %) 
+              ~@(nnext where)) 
+            ~from))))
 
 
 ;;; Non working restricted solution, cant figure out how to test predicate symbol(e.g. >) against a list. Tried making them strings but not allowed to (str (second where)), tried to (symbol >) them, didnt work
@@ -41,26 +43,10 @@
   Note: this could be in the macro above as an alternative (if (> (count where) 3)) but is done separate for any automated grading/testing, also leaves out whitelisting operators"
   [columns _ from _ where _ orderby]
   `(map
-    #(select-keys % ~columns)
-    (sort-by 
-     ~orderby
-     (filter 
-      #(every? true? (for [[colu# op# val#] (partition 3 ~where)] (op# (colu# %) val#))) 
-      ~from))))
- 
-(defn selectFunk
-  "Acts like an SQL statement (e.g. 'SELECT [:name :id] from persons where [:id = 2] orderby :name').
-  Due to how it is constucted the where clause can use any clojure function that returns boolean and looks like [column op value] -> '(op column value)'"
-  [columns _ from _ where _ orderby]
-  (do (println from)
-    (map
-      #(select-keys % columns)
+      #(select-keys % ~columns)
       (sort-by 
-        orderby 
-        (filter 
-          (fn [i] 
-            (resolve (second where) 
-             ((first where) i) 
-             (nnext where))) 
-          from)))))
+         ~orderby
+         (filter 
+            #(every? true? (for [[colu# op# val#] (partition 3 ~where)] (op# (colu# %) val#)))) 
+         ~from)))
 
