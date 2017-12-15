@@ -36,7 +36,7 @@
       #(~(second where) (~(first where) %) ~@(nnext where)) 
       ~from))))
 
-(defmacro select
+(defmacro select-preds
   "Acts like an SQL statement (e.g. 'SELECT [:name :id] from persons where [:id = 2] orderby :name').
   Due to how it is constucted the where clause can use any clojure function that returns boolean and looks like [column op value] -> '(op column value)'
   Works for any number of predicates in the where clause as long as they are in groups of 3, e.g. [:id > 1 :id < 4 :name not= 'isak']"
