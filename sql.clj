@@ -3,7 +3,8 @@
 
 (defmacro select
   "Acts like an SQL statement (e.g. 'SELECT [:name :id] from persons where [:id = 2] orderby :name').
-  Due to how it is constucted the where clause can use any clojure function that returns boolean and looks like [column op value] -> '(op column value)'"
+  Due to how it is constucted the where clause can use any clojure function that returns boolean and looks like [column op value] -> '(op column value)'
+  Allows for the use of <> by replacing it with not="
   [columns _ from _ where _ orderby]
   `(map
       #(select-keys % ~columns)
@@ -39,7 +40,7 @@
 (defmacro select-multi-preds
   "Acts like an SQL statement (e.g. 'SELECT [:name :id] from persons where [:id = 2] orderby :name').
   Due to how it is constucted the where clause can use any clojure function that returns boolean and looks like [column op value] -> '(op column value)'
-  Works for any number of predicates in the where clause as long as they are in groups of 3, e.g. [:id > 1 :id < 4 :name not= 'isak']
+  Works for any number of predicates in the where clause as long as they are in groups of 3, e.g. [:id > 1 :id < 4]
   Note: this could be in the macro above as an alternative (if (> (count where) 3)) but is done separate for any automated grading/testing, also leaves out whitelisting operators"
   [columns _ from _ where _ orderby]
   `(map
@@ -49,4 +50,3 @@
          (filter 
             #(every? true? (for [[colu# op# val#] (partition 3 ~where)] (op# (colu# %) val#)))) 
          ~from)))
-
