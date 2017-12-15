@@ -1,4 +1,4 @@
-(ns assign1.core
+(ns nca2.core
   (:gen-class))  
   
 (defmacro safe 
