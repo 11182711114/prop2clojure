@@ -33,7 +33,11 @@
     (sort-by 
      ~orderby 
      (filter 
-      #(~(second where) (~(first where) %) ~@(nnext where)) 
+      #(~(if (= (str (second where)) "<>") 
+           'not= 
+           (second where)) 
+        (~(first where) %) 
+        ~@(nnext where)) 
       ~from))))
 
 (defmacro select-preds
